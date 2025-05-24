@@ -63,7 +63,7 @@ class MainLayout extends StatelessWidget {
             color: const Color.fromARGB(255, 27, 27, 28),
             padding: const EdgeInsets.all(16),
             child: const Text(
-              'CL PWA',
+              'CL PWA1',
               style: TextStyle(color: Colors.white, fontSize: 18),
               textAlign: TextAlign.center,
             ),
