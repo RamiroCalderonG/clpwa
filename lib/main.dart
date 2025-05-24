@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'firebase_options.dart';
+import 'models/auto.dart';
+
 import 'views/home_view.dart';
 import 'views/config_view.dart';
 import 'views/autos_view.dart';
 import 'views/auto_form_view.dart';
-import 'views/auto_edit_form_view.dart'; // Nuevo para editar
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-import 'models/auto.dart';
+import 'views/auto_edit_form_view.dart';
 import 'views/gas_autos_view.dart';
 import 'views/gas_auto_dashboard_view.dart';
 import 'views/gas_carga_form_view.dart';
+import 'views/login_view.dart'; // <-- Nuevo
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +24,70 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'CL PWA',
+      debugShowCheckedModeBanner: false,
+      // Quitamos routes porque necesitamos lógica de auth antes
+      home: AuthGate(),
+    );
+  }
+}
+
+// Widget que controla el acceso y la whitelist
+class AuthGate extends StatelessWidget {
+  const AuthGate({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+        // Si no está logueado, muestra login
+        if (!snapshot.hasData) return const LoginView();
+
+        final user = snapshot.data!;
+        final email = user.email ?? '';
+
+        // Verifica whitelist en Firestore
+        return FutureBuilder<DocumentSnapshot>(
+          future:
+              FirebaseFirestore.instance
+                  .collection('whitelist')
+                  .doc(email)
+                  .get(),
+          builder: (context, whitelistSnap) {
+            if (whitelistSnap.connectionState == ConnectionState.waiting) {
+              return const Scaffold(
+                body: Center(child: CircularProgressIndicator()),
+              );
+            }
+            if (!whitelistSnap.hasData || !whitelistSnap.data!.exists) {
+              // Si no está autorizado, cierra sesión y muestra mensaje
+              FirebaseAuth.instance.signOut();
+              return const Scaffold(
+                body: Center(child: Text('No autorizado para acceder.')),
+              );
+            }
+            // Si está autorizado, muestra la app normal con rutas
+            return AppRouter();
+          },
+        );
+      },
+    );
+  }
+}
+
+// El router de tu app, igual que antes pero en un widget aparte
+class AppRouter extends StatelessWidget {
+  const AppRouter({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +113,7 @@ class MyApp extends StatelessWidget {
           return MainLayout(child: AutoEditFormView(auto: auto));
         },
       },
+      initialRoute: '/',
     );
   }
 }
