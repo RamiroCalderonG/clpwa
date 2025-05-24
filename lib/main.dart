@@ -75,7 +75,7 @@ class MainLayout extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             alignment: Alignment.center,
             child: const Text(
-              '© 2025 CL PWA. Todos los derechos reservados.',
+              '© 2025 CalderonLuna. Todos los derechos reservados.',
               style: TextStyle(color: Colors.white, fontSize: 12),
               textAlign: TextAlign.center,
             ),
