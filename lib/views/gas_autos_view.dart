@@ -64,7 +64,7 @@ class GasAutosView extends StatelessWidget {
                         onTap: () {
                           Navigator.pushNamed(
                             context,
-                            '/gas/auto',
+                            '/gas/auto/dashboard',
                             arguments: auto,
                           );
                         },

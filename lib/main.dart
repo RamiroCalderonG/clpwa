@@ -11,6 +11,7 @@ import 'views/gas_autos_view.dart';
 import 'views/gas_auto_dashboard_view.dart';
 import 'views/gas_carga_form_view.dart';
 import 'views/mant_autos_view.dart';
+import 'views/mant_auto_dashboard_view.dart';
 // Si tienes una vista individual de mantenimiento por auto, impórtala aquí.
 // import 'views/mant_auto_dashboard_view.dart';
 import 'models/auto.dart';
@@ -50,11 +51,11 @@ class MyApp extends StatelessWidget {
         },
         // Mantenimientos
         '/mant': (context) => const MainLayout(child: MantAutosView()),
-        // Si tienes un dashboard por auto para mantenimientos, descomenta y usa este ejemplo:
-        // '/mant/auto/dashboard': (context) {
-        //   final auto = ModalRoute.of(context)!.settings.arguments as Auto;
-        //   return MainLayout(child: MantAutoDashboardView(auto: auto));
-        // },
+        //Si tienes un dashboard por auto para mantenimientos, descomenta y usa este ejemplo:
+        '/mant/auto/dashboard': (context) {
+          final auto = ModalRoute.of(context)!.settings.arguments as Auto;
+          return MainLayout(child: MantAutoDashboardView(auto: auto));
+        },
       },
     );
   }

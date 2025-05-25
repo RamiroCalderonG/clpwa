@@ -29,7 +29,7 @@ class HomeView extends StatelessWidget {
               backgroundColor: Colors.orange,
             ),
             onPressed: () {
-              Navigator.pushNamed(context, '/mantenimientos');
+              Navigator.pushNamed(context, '/mant');
             },
           ),
           const SizedBox(height: 24),
