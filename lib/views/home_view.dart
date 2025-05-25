@@ -22,6 +22,18 @@ class HomeView extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           ElevatedButton.icon(
+            icon: const Icon(Icons.build),
+            label: const Text('Mantenimientos'),
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(200, 50),
+              backgroundColor: Colors.orange,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, '/mantenimientos');
+            },
+          ),
+          const SizedBox(height: 24),
+          ElevatedButton.icon(
             icon: const Icon(Icons.settings),
             label: const Text('Configuración'),
             style: ElevatedButton.styleFrom(minimumSize: const Size(200, 50)),

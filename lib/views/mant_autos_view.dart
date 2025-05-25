@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/auto.dart';
+import 'mant_auto_dashboard_view.dart';
 
-class GasAutosView extends StatelessWidget {
-  const GasAutosView({super.key});
+class MantAutosView extends StatelessWidget {
+  const MantAutosView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +60,17 @@ class GasAutosView extends StatelessWidget {
                                   radius: 30,
                                 ),
                         title: Text(
-                          '${auto.marca} ${auto.modelo} (${auto.placa})',
+                          '${auto.marca} ${auto.modelo} (${auto.anio})',
+                        ),
+                        subtitle: Text(
+                          'VIN: ${auto.vin}\nPlaca: ${auto.placa}',
                         ),
                         onTap: () {
-                          Navigator.pushNamed(
+                          Navigator.push(
                             context,
-                            '/gas/auto',
-                            arguments: auto,
+                            MaterialPageRoute(
+                              builder: (_) => MantAutoDashboardView(auto: auto),
+                            ),
                           );
                         },
                       ),
