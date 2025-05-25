@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import 'views/home_view.dart';
 import 'views/config_view.dart';
 import 'views/autos_view.dart';
 import 'views/auto_form_view.dart';
 import 'views/auto_edit_form_view.dart';
+import 'views/gas_autos_view.dart';
+import 'views/gas_auto_dashboard_view.dart';
+import 'views/gas_carga_form_view.dart';
+import 'views/mant_autos_view.dart';
+// Si tienes una vista individual de mantenimiento por auto, impórtala aquí.
+// import 'views/mant_auto_dashboard_view.dart';
 import 'models/auto.dart';
-import 'views/login_view.dart'; // Nueva vista de login
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,8 +29,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'CL PWA',
       debugShowCheckedModeBanner: false,
-      home: const AuthGate(), // Cambia routes por home con AuthGate
       routes: {
+        '/': (context) => const MainLayout(child: HomeView()),
         '/config': (context) => const MainLayout(child: ConfigView()),
         '/autos': (context) => const MainLayout(child: AutosView()),
         '/autos/form': (context) => const MainLayout(child: AutoFormView()),
@@ -34,29 +38,23 @@ class MyApp extends StatelessWidget {
           final auto = ModalRoute.of(context)!.settings.arguments as Auto;
           return MainLayout(child: AutoEditFormView(auto: auto));
         },
-        // Puedes agregar tus otras rutas aquí
-      },
-    );
-  }
-}
-
-/// Revisa si el usuario está autenticado, y si no, muestra la pantalla de login.
-class AuthGate extends StatelessWidget {
-  const AuthGate({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (!snapshot.hasData) {
-          return const LoginView();
-        }
-        // Usuario autenticado, muestra el home normal
-        return MainLayout(child: HomeView());
+        // Gasolina
+        '/gas': (context) => const MainLayout(child: GasAutosView()),
+        '/gas/auto/dashboard': (context) {
+          final auto = ModalRoute.of(context)!.settings.arguments as Auto;
+          return MainLayout(child: GasAutoDashboardView(auto: auto));
+        },
+        '/gas/auto/carga': (context) {
+          final auto = ModalRoute.of(context)!.settings.arguments as Auto;
+          return MainLayout(child: GasCargaFormView(auto: auto));
+        },
+        // Mantenimientos
+        '/mant': (context) => const MainLayout(child: MantAutosView()),
+        // Si tienes un dashboard por auto para mantenimientos, descomenta y usa este ejemplo:
+        // '/mant/auto/dashboard': (context) {
+        //   final auto = ModalRoute.of(context)!.settings.arguments as Auto;
+        //   return MainLayout(child: MantAutoDashboardView(auto: auto));
+        // },
       },
     );
   }
@@ -64,6 +62,7 @@ class AuthGate extends StatelessWidget {
 
 class MainLayout extends StatelessWidget {
   final Widget child;
+
   const MainLayout({super.key, required this.child});
 
   @override
