@@ -11,7 +11,7 @@ class HomeView extends StatelessWidget {
         children: [
           ElevatedButton.icon(
             icon: const Icon(Icons.local_gas_station),
-            label: const Text('Gasolina y Combustibles'),
+            label: const Text('Gasolina '),
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(200, 50),
               backgroundColor: Colors.green,
