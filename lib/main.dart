@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'CL PWA',
+      title: 'CL PWA 2025',
       debugShowCheckedModeBanner: false,
       routes: {
         '/': (context) => const MainLayout(child: HomeView()),
